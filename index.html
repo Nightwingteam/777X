@@ -4,14 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boeing 777X - The New Kings of the Skies</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0c1016;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .moving-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #0c1016 25%, #1a2333 50%, #0c1016 75%);
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #7aa2f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(122, 162, 247, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #7aa2f7;
+        }
+
+        .glass-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .glass-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.47);
+        }
+
+        .glass-box h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #7aa2f7;
+        }
+
+        .specs {
+            margin-bottom: 1.5rem;
+        }
+
+        .specs p {
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            line-height: 1.6;
+        }
+
+        .features ul {
+            list-style-position: inside;
+            line-height: 1.8;
+        }
+
+        .features li {
+            margin-bottom: 1rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .glass-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .glass-box {
+                padding: 1.5rem;
+            }
+        }
+
+        .timestamp {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
     <div class="moving-background"></div>
     
+    <div class="timestamp">Last Updated: 2025-03-03 09:09:38 UTC</div>
+
     <header>
         <h1>Boeing 777X Series</h1>
         <p class="subtitle">The New Kings of the Skies</p>
@@ -61,6 +206,36 @@
         <p>© 2025 Aviation Enthusiasts - Created by Nightwingteam</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Parallax effect for background
+            document.addEventListener('mousemove', (e) => {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.005;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.005;
+                
+                document.querySelector('.moving-background').style.transform = 
+                    `translate(${moveX}px, ${moveY}px)`;
+            });
+
+            // Smooth appearance of glass boxes on scroll
+            const glassBoxes = document.querySelectorAll('.glass-box');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            glassBoxes.forEach(box => {
+                box.style.opacity = '0';
+                box.style.transform = 'translateY(50px)';
+                box.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(box);
+            });
+        });
+    </script>
 </body>
 </html>
